@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: valida
+      POSTGRES_PASSWORD: valida
+      POSTGRES_DB: valida_pacientes
+    ports:
+      - "54329:5432"
+    volumes:
+      - valida_pg:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U valida -d valida_pacientes"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  valida_pg:

@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  MEDICO
+}
+
+enum PatientStatus {
+  PENDENTE
+  VALIDADO
+  RECUSADO
+}
+
+enum DecisionKind {
+  VALIDADO
+  RECUSADO
+}
+
+model User {
+  id            String            @id @default(cuid())
+  name          String
+  email         String            @unique
+  passwordHash  String
+  role          Role
+  active        Boolean           @default(true)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  patients      Patient[]         @relation("AssignedDoctor")
+  decisions     PatientDecision[]
+  refreshTokens RefreshToken[]
+}
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+}
+
+model Patient {
+  id               String            @id @default(cuid())
+  fullName         String
+  birthDate        DateTime          @db.Date
+  documentLast4    String            @db.Char(4)
+  operationalNote  String?
+  status           PatientStatus     @default(PENDENTE)
+  active           Boolean           @default(true)
+  assignedDoctorId String
+  assignedDoctor   User              @relation("AssignedDoctor", fields: [assignedDoctorId], references: [id])
+  decisions        PatientDecision[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  @@index([assignedDoctorId, status])
+}
+
+model PatientDecision {
+  id        String       @id @default(cuid())
+  patientId String
+  patient   Patient      @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctorId  String
+  doctor    User         @relation(fields: [doctorId], references: [id])
+  decision  DecisionKind
+  reason    String?
+  createdAt DateTime     @default(now())
+
+  @@index([patientId, createdAt])
+}

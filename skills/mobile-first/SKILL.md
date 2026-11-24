@@ -8,15 +8,15 @@ description: >-
 metadata:
   framework: maestro-engineering-skills
   category: frontend
-  version: "1.1.0"
-  source: "generalized-from-staltek-reference"
+  version: "1.2.0"
+  source: "generalized-from-plusgestor-tanamao"
 ---
 
 # Mobile-First
 
 ## Objetivo
 
-Garantir que fluxos caibam e sejam usáveis em largura estreita (≥320px) **antes** de enriquecer o desktop. Padrões GENERALIZADOS da referência: shell dual, bottom nav, sheets, alvos de toque, formulários e tabelas adaptadas.
+Garantir que fluxos caibam e sejam usáveis em largura estreita (≥320px) **antes** de enriquecer o desktop. Padrão alinhado ao +Gestor/tanamao: sidebar→bottom nav, PageHeader com ações empilhadas, dialog→bottom sheet, alvos ≥44px, sem scroll horizontal da página.
 
 ## Quando ativar
 
@@ -54,12 +54,13 @@ Garantir que fluxos caibam e sejam usáveis em largura estreita (≥320px) **ant
 
 ## Processo de execução
 
-1. Identificar shell: sidebar desktop vs nav inferior mobile.
-2. Implementar fluxo em 320–430px.
-3. Adaptar overlays (modal→sheet), listas (card↔tabela), headers (ações em sheet se necessário).
-4. Verificar teclado virtual + barras fixas.
+1. Identificar shell (`saas-app-shell`): sidebar desktop vs bottom nav mobile — **mesma** `navigation.ts`.
+2. Implementar fluxo em 320–430px; validar também 390 e 768.
+3. Adaptar overlays (modal→sheet), listas (card↔tabela), `PageHeader` com ações full-width no mobile.
+4. Verificar teclado virtual + barras fixas + `safe-area-inset-bottom`.
 5. Expandir para tablet/desktop sem regressão mobile.
 6. Declarar o que foi testado (browser) ou **não** testado — não inventar QA visual.
+7. Evitar `min-w-[600px]+` e grids fixos sem breakpoint (`grid-cols-3` → `grid-cols-1 md:grid-cols-3`).
 
 ### Navegação (OBSERVADO → GENERALIZADO)
 

@@ -105,7 +105,7 @@ Coordenação: `maestro-orchestrator` + `agent-orchestration`. Subagentes deleg�
 
 | Domínio | Skills mínimas |
 |---------|----------------|
-| UI | FE/UX/DS/mobile conforme necessidade |
+| UI | `saas-app-shell` + `design-system` + FE/UX/mobile (apps com login) |
 | API/dados | backend, api-design, postgres, multi-tenancy |
 | Segurança | security, auth |
 | Infra | hostinger/docker/nginx/env… |

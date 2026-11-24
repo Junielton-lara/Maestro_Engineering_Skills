@@ -59,6 +59,7 @@ EXPECTED = {
     "frontend-engineering",
     "ux-ui-design",
     "design-system",
+    "saas-app-shell",
     "mobile-first",
     "responsive-layout",
     "accessibility",

@@ -8,15 +8,15 @@ description: >-
 metadata:
   framework: maestro-engineering-skills
   category: frontend
-  version: "1.1.0"
-  source: "generalized-from-staltek-reference"
+  version: "1.2.0"
+  source: "generalized-from-plusgestor-tanamao"
 ---
 
 # Frontend Engineering
 
 ## Objetivo
 
-Entregar front-end estruturado, reutilizável e alinhado ao DS/UX do Maestro — inspirado na arquitetura OBSERVADA (features + layouts + `components/ui` + query + RHF/Zod), sem impor a stack Staltek se o projeto já tiver outra.
+Entregar front-end estruturado, reutilizável e alinhado ao DS/UX do Maestro — padrão B2B do +Gestor/tanamao: `layouts/` (sidebar+topbar), `components/ui`, TanStack Query, RHF/Zod, Lucide. Respeitar stack já existente do repo se divergir.
 
 ## Quando ativar
 
@@ -38,13 +38,15 @@ Entregar front-end estruturado, reutilizável e alinhado ao DS/UX do Maestro —
 
 1. **Inspecionar antes de criar** — reutilizar componente/hook/serviço existente.
 2. **Não introduzir** outra lib de UI/HTTP/form sem decisão explícita.
-3. **Organização**: preferir `features/<domínio>/` + `layouts/` + `components/ui/` (OBSERVADO) ou espelhar o que o repo já usa.
-4. **Validação client + server** — schema no FE melhora UX; **não substitui** validação no backend.
-5. **Dados remotos** com cache/invalidação explícita (React Query ou padrão do projeto).
-6. Tratar **loading / empty / error** em cada página de dados.
-7. **AuthZ na UI é cosmético** — permissão real no servidor.
-8. Rotas pesadas: **lazy + Suspense** com skeleton da página.
-9. Utilitário `cn` (clsx + tailwind-merge) ou equivalente do projeto para classes.
+3. **Organização**: `layouts/` (AppLayout/Sidebar/TopBar) + `features/` ou `pages/` + `components/ui` + `components/shared` (PageHeader).
+4. App com login → aplicar `saas-app-shell` + `design-system` (Inter, tokens navy/azul).
+5. **Validação client + server** — todo input com limite (`maxLength`/Zod); schema não substitui o backend.
+6. **Dados remotos** com TanStack Query (ou padrão do repo) e `invalidateQueries` após mutation.
+7. Tratar **loading / empty / error** em cada página de dados (skeleton > spinner global).
+8. **AuthZ na UI é cosmético** — permissão real no servidor. Access token só em memória; refresh via cookie.
+9. Rotas pesadas: **lazy + Suspense** com skeleton da página.
+10. Utilitário `cn` (clsx + tailwind-merge) quando o projeto usar Tailwind.
+11. Sem `alert()` / `confirm()` / `prompt()`.
 
 ## Processo de execução
 
@@ -121,4 +123,4 @@ src/
 
 ## Skills relacionadas
 
-- `design-system`, `ux-ui-design`, `mobile-first`, `responsive-layout`, `frontend-performance`, `accessibility`, `project-foundation`, `api-design`
+- `saas-app-shell`, `design-system`, `ux-ui-design`, `mobile-first`, `responsive-layout`, `frontend-performance`, `accessibility`, `project-foundation`, `api-design`

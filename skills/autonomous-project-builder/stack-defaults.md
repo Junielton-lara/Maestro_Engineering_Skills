@@ -34,9 +34,10 @@ Escolher apenas ferramentas disponíveis ou instaláveis via gerenciador de paco
 |--------|---------|--------|
 | Layout | `frontend/`, `backend/`, `database/`, `tests/` (E2E), `docs/` | Separação clara FE/BE; permite subagentes em paralelo |
 | Gerenciador | npm (vem com Node) | Zero instalação extra |
-| UI | Tailwind CSS + componentes próprios em `components/ui` com tokens semânticos | Alinha com `design-system`; sem lock-in |
+| UI | Tailwind + `components/ui` + tokens +Gestor-like (Inter, navy/azul) | `design-system` + `saas-app-shell` |
+| Shell autenticado | Sidebar escura + topbar + dashboard KPI + PageHeader | Padrão Mais Gestor / tanamao; Lucide |
 | Roteamento / dados | React Router · TanStack Query | Cache, loading/error padronizados |
-| Formulários | React Hook Form + Zod | Validação tipada; schema espelhado no server |
+| Formulários | React Hook Form + Zod (limites em todo campo) | Validação tipada; schema espelhado no server |
 | API | NestJS (módulo por domínio), `ValidationPipe` whitelist, filtro de exceção global | Estrutura modular + validação server-side |
 | ORM / migrations | Prisma (`backend/prisma/` ou `database/`) | Migrations versionadas, tipos gerados |
 | Auth | JWT de acesso curto + refresh em cookie httpOnly; senha com argon2 (ou bcrypt); RBAC por guard | `authentication-authorization` |

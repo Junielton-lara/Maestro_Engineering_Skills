@@ -4,6 +4,12 @@ Todas as mudanças notáveis deste repositório.
 
 ## Unreleased
 
+### Added — Shell B2B estilo +Gestor
+
+- Skill global `saas-app-shell`: sidebar, topbar, dashboard KPI, Inter, tokens navy/azul (referência tanamao/+Gestor).
+- `design-system`, `frontend-engineering`, `mobile-first` e `stack-defaults` alinhados a esse padrão para apps com login.
+- Projeto exemplo `projects/valida-pacientes/` (login de médico + validação de lista).
+
 ### Added — Ambiente de desenvolvimento autônomo
 
 - Workspace `projects/<slug>/` para produtos isolados + `scripts/new-project.py` (criar/listar) + `templates/project/`.
