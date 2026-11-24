@@ -1,7 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
+import { Plus } from 'lucide-react';
 import { FormEvent, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Button, EmptyState, ErrorState, LoadingState, StatusBadge, STATUS_LABEL } from '../../components/ui';
+import { PageHeader } from '../../components/shared/PageHeader';
+import { Button, Card, EmptyState, ErrorState, LoadingState, StatusBadge, STATUS_LABEL } from '../../components/ui';
+import { cn } from '../../lib/cn';
 import { ageFrom, formatDate } from '../../lib/format';
 import { listPatients, patientSummary, PatientStatus } from '../../services/api';
 import { useAuth } from '../auth/auth-context';
@@ -47,23 +50,27 @@ export function PatientsPage() {
 
   return (
     <section>
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="font-display text-4xl">Lista de pacientes</h1>
-          <p className="mt-1 max-w-xl text-muted">
-            {user?.role === 'MEDICO'
-              ? 'Só aparecem pacientes ativos atribuídos a você. Valide um por um.'
-              : 'Cadastre a lista e atribua o médico. A validação fica com ele.'}
-          </p>
-        </div>
-        {user?.role === 'ADMIN' ? (
-          <Link to="/pacientes/novo" className="inline-flex min-h-11 items-center rounded-lg bg-primary px-4 text-sm font-semibold text-white">
-            Novo paciente
-          </Link>
-        ) : null}
-      </div>
+      <PageHeader
+        title="Pacientes"
+        description={
+          user?.role === 'MEDICO'
+            ? 'Só aparecem pacientes ativos atribuídos a você. Valide um por um.'
+            : 'Cadastre a lista e atribua o médico. A validação fica com ele.'
+        }
+        actions={
+          user?.role === 'ADMIN' ? (
+            <Link
+              to="/pacientes/novo"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-secondary px-4 text-sm font-semibold text-secondary-foreground"
+            >
+              <Plus className="h-4 w-4" aria-hidden />
+              Novo paciente
+            </Link>
+          ) : null
+        }
+      />
 
-      <div className="mt-5 flex gap-2 overflow-x-auto pb-1">
+      <div className="flex gap-2 overflow-x-auto pb-1">
         {FILTERS.map((filter) => {
           const selected = status === filter.id;
           const count = filter.countKey ? summary.data?.[filter.countKey] : undefined;
@@ -72,7 +79,10 @@ export function PatientsPage() {
               key={filter.label}
               type="button"
               aria-pressed={selected}
-              className={`min-h-11 shrink-0 rounded-full px-4 text-sm font-semibold ${selected ? 'bg-primary text-white' : 'bg-surface text-ink'}`}
+              className={cn(
+                'min-h-11 shrink-0 rounded-full px-4 text-sm font-semibold transition',
+                selected ? 'bg-secondary text-white' : 'bg-card text-foreground shadow-card',
+              )}
               onClick={() => replace({ status: filter.id || null, page: null })}
             >
               {filter.label}
@@ -88,7 +98,7 @@ export function PatientsPage() {
           <input
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
-            className="mt-1 w-full min-h-11 rounded-lg border border-line bg-surface px-3 font-normal"
+            className="mt-1 w-full min-h-11 rounded-xl border border-border bg-card px-3 font-normal"
           />
         </label>
         <Button type="submit" className="sm:self-end" variant="ghost">
@@ -96,7 +106,7 @@ export function PatientsPage() {
         </Button>
       </form>
 
-      <div className="mt-5">
+      <div className="mt-5 space-y-3">
         {list.isLoading ? <LoadingState label="Carregando lista…" /> : null}
         {list.isError ? (
           <ErrorState message="Não foi possível carregar a lista." onRetry={() => void list.refetch()} />
@@ -111,22 +121,24 @@ export function PatientsPage() {
           {list.data?.data.map((patient) => {
             const age = ageFrom(patient.birthDate);
             return (
-              <li key={patient.id} className="rounded-xl border border-line bg-surface p-4 shadow-card">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
-                    <h2 className="text-xl font-semibold">{patient.fullName}</h2>
-                    <p className="mt-1 text-sm text-muted">
-                      Nascimento {formatDate(patient.birthDate)}
-                      {age !== null ? ` · ${age} anos` : ''} · documento final {patient.documentLast4}
-                    </p>
-                    {user?.role === 'ADMIN' ? <p className="mt-1 text-sm">Médico: {patient.assignedDoctor.name}</p> : null}
-                    {!patient.active ? <p className="mt-1 text-sm text-danger">Inativo</p> : null}
+              <li key={patient.id}>
+                <Card className="p-4">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <h2 className="text-lg font-semibold tracking-tight">{patient.fullName}</h2>
+                      <p className="mt-1 text-sm text-muted">
+                        Nascimento {formatDate(patient.birthDate)}
+                        {age !== null ? ` · ${age} anos` : ''} · documento final {patient.documentLast4}
+                      </p>
+                      {user?.role === 'ADMIN' ? <p className="mt-1 text-sm text-muted">Médico: {patient.assignedDoctor.name}</p> : null}
+                      {!patient.active ? <p className="mt-1 text-sm text-danger">Inativo</p> : null}
+                    </div>
+                    <StatusBadge status={patient.status} />
                   </div>
-                  <StatusBadge status={patient.status} />
-                </div>
-                <Link to={`/pacientes/${patient.id}`} className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-primary">
-                  Abrir {STATUS_LABEL[patient.status].toLowerCase()}
-                </Link>
+                  <Link to={`/pacientes/${patient.id}`} className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-secondary">
+                    Abrir {STATUS_LABEL[patient.status].toLowerCase()}
+                  </Link>
+                </Card>
               </li>
             );
           })}

@@ -1,35 +1,28 @@
-import { Link, Outlet } from 'react-router-dom';
-import { Button } from '../components/ui';
-import { useAuth } from '../features/auth/auth-context';
+import { Outlet } from 'react-router-dom';
+import { MobileBottomNav } from './mobile/MobileBottomNav';
+import { Sidebar } from './Sidebar';
+import { TopBar } from './TopBar';
 
 export function AppShell() {
-  const { user, logout } = useAuth();
-  const roleLabel = user?.role === 'ADMIN' ? 'Administração' : 'Médico';
-
   return (
-    <div className="min-h-screen">
-      <a href="#conteudo" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-30 focus:bg-surface focus:px-3 focus:py-2">
+    <div className="min-h-screen bg-background">
+      <a
+        href="#conteudo"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-card focus:px-3 focus:py-2"
+      >
         Ir para o conteúdo
       </a>
-      <header className="border-b border-line bg-surface/90">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-3">
-          <Link to="/pacientes" className="font-display text-2xl text-ink">
-            ValidaPacientes
-          </Link>
-          <div className="flex items-center gap-3">
-            <p className="text-sm">
-              <span className="block font-semibold">{user?.name}</span>
-              <span className="text-muted">{roleLabel}</span>
-            </p>
-            <Button variant="ghost" onClick={() => void logout()}>
-              Sair
-            </Button>
-          </div>
-        </div>
-      </header>
-      <main id="conteudo" className="mx-auto max-w-5xl px-4 py-6">
-        <Outlet />
-      </main>
+      <Sidebar />
+      <div className="flex min-h-screen flex-col lg:pl-[260px]">
+        <TopBar />
+        <main
+          id="conteudo"
+          className="mx-auto w-full min-w-0 max-w-[1600px] flex-1 animate-fade-in px-4 pb-[calc(5.5rem+env(safe-area-inset-bottom))] pt-5 sm:p-6 lg:p-8 lg:pb-8"
+        >
+          <Outlet />
+        </main>
+      </div>
+      <MobileBottomNav />
     </div>
   );
 }

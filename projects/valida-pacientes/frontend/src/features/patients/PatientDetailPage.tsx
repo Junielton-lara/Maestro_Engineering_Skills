@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Alert, Button, Dialog, ErrorState, LoadingState, StatusBadge, TextAreaField } from '../../components/ui';
+import { PageHeader } from '../../components/shared/PageHeader';
+import { Alert, Button, Card, Dialog, ErrorState, LoadingState, StatusBadge, TextAreaField } from '../../components/ui';
 import { ageFrom, formatDate, formatDateTime } from '../../lib/format';
 import { decisionSchema } from '../../lib/schemas';
 import { ApiRequestError, decidePatient, getPatient } from '../../services/api';
@@ -56,34 +57,33 @@ export function PatientDetailPage() {
 
   return (
     <article>
-      <Link to="/pacientes" className="text-sm font-semibold text-primary">
-        Voltar à lista
-      </Link>
-      <div className="mt-3 flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="font-display text-4xl">{current.fullName}</h1>
-          <p className="mt-2 text-muted">
-            Nascimento {formatDate(current.birthDate)}
-            {age !== null ? ` · ${age} anos` : ''}
-          </p>
-        </div>
-        <StatusBadge status={current.status} />
-      </div>
+      <PageHeader
+        leading={
+          <Link to="/pacientes" className="text-sm font-semibold text-secondary">
+            Voltar à lista
+          </Link>
+        }
+        title={current.fullName}
+        description={`Nascimento ${formatDate(current.birthDate)}${age !== null ? ` · ${age} anos` : ''}`}
+        actions={<StatusBadge status={current.status} />}
+      />
 
-      <dl className="mt-5 grid gap-3 rounded-xl border border-line bg-surface p-4 sm:grid-cols-2">
-        <div>
-          <dt className="text-sm text-muted">Final do documento</dt>
-          <dd className="text-lg font-semibold">{current.documentLast4}</dd>
-        </div>
-        <div>
-          <dt className="text-sm text-muted">Médico responsável</dt>
-          <dd className="text-lg font-semibold">{current.assignedDoctor.name}</dd>
-        </div>
-        <div className="sm:col-span-2">
-          <dt className="text-sm text-muted">Nota operacional</dt>
-          <dd>{current.operationalNote || 'Sem nota.'}</dd>
-        </div>
-      </dl>
+      <Card className="p-4">
+        <dl className="grid gap-3 sm:grid-cols-2">
+          <div>
+            <dt className="text-sm text-muted">Final do documento</dt>
+            <dd className="text-lg font-semibold">{current.documentLast4}</dd>
+          </div>
+          <div>
+            <dt className="text-sm text-muted">Médico responsável</dt>
+            <dd className="text-lg font-semibold">{current.assignedDoctor.name}</dd>
+          </div>
+          <div className="sm:col-span-2">
+            <dt className="text-sm text-muted">Nota operacional</dt>
+            <dd>{current.operationalNote || 'Sem nota.'}</dd>
+          </div>
+        </dl>
+      </Card>
 
       {canDecide ? (
         <div className="mt-4 flex flex-col gap-2 sm:flex-row">
@@ -109,20 +109,22 @@ export function PatientDetailPage() {
         </div>
       ) : null}
       {user?.role === 'ADMIN' ? (
-        <Link to={`/pacientes/${current.id}/editar`} className="mt-4 inline-flex min-h-11 items-center font-semibold text-primary">
+        <Link to={`/pacientes/${current.id}/editar`} className="mt-4 inline-flex min-h-11 items-center font-semibold text-secondary">
           Editar cadastro
         </Link>
       ) : null}
 
       <section className="mt-8">
-        <h2 className="font-display text-2xl">Histórico</h2>
+        <h2 className="text-xl font-semibold tracking-tight">Histórico</h2>
         {current.decisions.length === 0 ? <p className="mt-2 text-muted">Nenhuma decisão registrada.</p> : null}
         <ol className="mt-3 space-y-3">
           {current.decisions.map((item) => (
-            <li key={item.id} className="rounded-xl border border-line bg-surface p-4">
-              <p className="font-semibold">{item.decision === 'VALIDADO' ? 'Validado' : 'Recusado'} por {item.doctor.name}</p>
-              <p className="text-sm text-muted">{formatDateTime(item.createdAt)}</p>
-              {item.reason ? <p className="mt-2">{item.reason}</p> : null}
+            <li key={item.id}>
+              <Card className="p-4">
+                <p className="font-semibold">{item.decision === 'VALIDADO' ? 'Validado' : 'Recusado'} por {item.doctor.name}</p>
+                <p className="text-sm text-muted">{formatDateTime(item.createdAt)}</p>
+                {item.reason ? <p className="mt-2">{item.reason}</p> : null}
+              </Card>
             </li>
           ))}
         </ol>

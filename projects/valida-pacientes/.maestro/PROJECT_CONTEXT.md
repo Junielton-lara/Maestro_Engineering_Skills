@@ -44,8 +44,8 @@
 | Campo | Valor |
 |-------|-------|
 | Fase do fluxo | 8 Entrega |
-| Último entregável validado | V1 local: login, lista isolada e validação por paciente |
-| Próximo passo | Commit só se o desenvolvedor pedir |
+| Último entregável validado | Front no padrão saas-app-shell (+Gestor): sidebar, dash, Inter |
+| Próximo passo | Revisar visual; commit se pedido |
 | Bloqueios / perguntas abertas | Nenhum |
 
 ## Fora de escopo deste knowledge
