@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Sync canonical skills/ -> .cursor/skills and .claude/skills."""
+"""Sync canonical skills/ and agents/ -> .cursor and .claude."""
 
 from __future__ import annotations
 
@@ -10,6 +10,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "skills"
 TARGETS = [ROOT / ".cursor" / "skills", ROOT / ".claude" / "skills"]
+AGENTS_SOURCE = ROOT / "agents"
+AGENT_TARGETS = [ROOT / ".cursor" / "agents", ROOT / ".claude" / "agents"]
 
 
 def main() -> int:
@@ -30,6 +32,13 @@ def main() -> int:
                 shutil.rmtree(dest)
             shutil.copytree(skill, dest)
         print(f"Synced {len(skill_dirs)} skills -> {target}")
+
+    agent_files = sorted(AGENTS_SOURCE.glob("*.md")) if AGENTS_SOURCE.is_dir() else []
+    for target in AGENT_TARGETS:
+        target.mkdir(parents=True, exist_ok=True)
+        for agent in agent_files:
+            shutil.copy2(agent, target / agent.name)
+        print(f"Synced {len(agent_files)} agents -> {target}")
 
     print("Done.")
     return 0

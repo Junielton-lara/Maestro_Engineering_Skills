@@ -8,7 +8,7 @@ description: >-
 metadata:
   framework: maestro-engineering-skills
   category: core
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # Product Discovery
@@ -43,7 +43,8 @@ Transformar intenção vaga em entendimento verificável do problema, usuários,
 3. Definir **hipóteses testáveis** e sinais de invalidação.
 4. Delimitar **MVP**: o mínimo que prova valor; explicitar **fora de escopo**.
 5. Ao final, recomendar `prompt-master-generator` se ainda não houver spec escrita.
-6. Não inventar dados de mercado; marcar suposições como `[SUPOSIÇÃO]`.
+6. Não inventar dados de mercado; marcar suposições como `[SUPOSIÇÃO]` (no workspace Maestro: registrar em `PRODUCT_SPECIFICATION.md` §10 “Premissas”).
+7. Em modo automatic do `autonomous-project-builder`: **não entrevistar** — inferir respostas do pedido e do domínio, registrar como premissas e seguir; perguntar só nas condições de parada do builder.
 
 ## Processo de execução
 

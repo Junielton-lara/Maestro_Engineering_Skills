@@ -7,7 +7,7 @@ description: >-
 metadata:
   framework: maestro-engineering-skills
   category: agents
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # Development Agent
@@ -35,7 +35,7 @@ Implementar, corrigir e refatorar código com diff mínimo, alinhado à arquitet
 
 ## Regras obrigatórias
 
-1. Ler Living Knowledge **antes** de explorar o repo inteiro.
+1. Ler Living Knowledge **antes** de explorar o repo inteiro (workspace Maestro: `projects/<slug>/.maestro/`; editar só dentro de `projects/<slug>/`).
 2. Inspecionar módulo vizinho; **não** reinventar componente/endpoint.
 3. Respeitar arquitetura e regras de negócio documentadas.
 4. Validação server-side para regras de negócio; UI não autoriza.
@@ -44,6 +44,7 @@ Implementar, corrigir e refatorar código com diff mínimo, alinhado à arquitet
 7. Sem segredos em código/logs.
 8. Não declarar “pronto” sem lint/teste do pacote tocado (ou reportar falha).
 9. Economia: `maestro-token-efficiency` + `efficient-development`.
+10. Funcionalidade nova = comportamento real (API + persistência + validação server-side + estados de UI); sem tela demonstrativa com dados fixos.
 
 ## Processo de execução
 

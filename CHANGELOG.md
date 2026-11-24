@@ -4,6 +4,22 @@ Todas as mudanças notáveis deste repositório.
 
 ## Unreleased
 
+### Added — Ambiente de desenvolvimento autônomo
+
+- Workspace `projects/<slug>/` para produtos isolados + `scripts/new-project.py` (criar/listar) + `templates/project/`.
+- `AGENTS.md` e `CLAUDE.md` na raiz (roteamento sempre carregado); `AGENTS.md`/`CLAUDE.md` por projeto.
+- Subagentes reais em `agents/` (`maestro-frontend-developer`, `maestro-backend-developer`, `maestro-qa`, `maestro-code-reviewer`, `maestro-security-reviewer`), sincronizados em `.cursor/agents` e `.claude/agents`.
+- `.maestro/PRODUCT_SPECIFICATION.md` e seção “Estado atual” em `PROJECT_CONTEXT.md`.
+- `skills/autonomous-project-builder/stack-defaults.md` (matriz de decisão de stack).
+- `docs/autonomous-development.md`.
+
+### Changed — Ambiente de desenvolvimento autônomo
+
+- `autonomous-project-builder` 2.0: modo automatic por padrão, 8 fases, autonomia técnica com ADR e condições de parada explícitas.
+- `maestro-core`, `maestro-orchestrator` (papéis → skills/subagentes, paralelo × sequencial), `project-foundation`, `prompt-master-generator`, `knowledge-agent`, `documentation-agent`, `development-agent`, `git-agent` cientes do workspace.
+- Living Knowledge: `knowledge/architecture.md` → `ARCHITECTURE.md`, `knowledge/database-map.md` → `DATABASE.md`, `knowledge/technical-decisions.md` → `technical-decisions.md` (raiz do `.maestro/`).
+- `sync-skills` também sincroniza `agents/`; `validate-skills` valida agentes e arquivos do workspace.
+
 ### Added
 
 - Ecossistema de agentes: `maestro-orchestrator`, `development-agent`, `code-review-agent`, `qa-agent`, `documentation-agent`, `git-agent`, `knowledge-agent`, `infrastructure-agent`.

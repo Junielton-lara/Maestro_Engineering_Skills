@@ -10,9 +10,11 @@ O Cursor carrega `name` + `description` para decidir quando aplicar uma skill (p
 
 Para tarefas amplas, peça **Maestro Core** (`maestro-core`). Entregas multi-etapa: `maestro-orchestrator` + agentes de papel. Economia contínua: `maestro-token-efficiency`.
 
-Conhecimento do **produto** (se for um app): pasta `.maestro/` na raiz do app — não confundir com esta biblioteca global.
+Conhecimento do **produto**: `projects/<slug>/.maestro/` (ou `.maestro/` na raiz de um app externo) — não confundir com esta biblioteca global.
 
-Subagentes Cursor (`Task`) podem executar papéis em paralelo para **leitura**; escrita no mesmo arquivo permanece serial.
+Instruções sempre ativas: `AGENTS.md` na raiz e `projects/<slug>/AGENTS.md` (aplicado ao trabalhar em arquivos do projeto).
+
+Subagentes Maestro em `.cursor/agents/` (fonte: `../agents/`): FE/BE podem rodar em paralelo em paths disjuntos; reviewers são `readonly`. Escrita no mesmo arquivo permanece serial.
 
 ## Sincronização
 
@@ -22,7 +24,7 @@ Fonte canônica: `../skills/`.
 python scripts/sync-skills.py
 ```
 
-Não edite cópias em `.cursor/skills/` — altere `skills/` e sincronize.
+Não edite cópias em `.cursor/skills/` ou `.cursor/agents/` — altere `skills/` / `agents/` e sincronize.
 
 ## Templates
 

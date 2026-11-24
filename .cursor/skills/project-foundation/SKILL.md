@@ -5,11 +5,11 @@ description: >-
   feature work: purpose, stack, architecture, directories, FE/BE/DB/auth/env/
   security/components/responsiveness/tests/docs. Use after Prompt Master or for
   greenfield setup. Do not force one architecture on every product or start
-  coding features before the foundation is agreed.
+  coding features before the foundation is defined and recorded.
 metadata:
   framework: maestro-engineering-skills
   category: core
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # Project Foundation
@@ -48,7 +48,7 @@ Antes de funcionalidades, estabelecer a **fundação técnica** do repositório:
 8. Ambientes (`.env.example` sem segredos) e segurança baseline.
 9. Padrões de componentes e responsividade.
 10. Estratégia de testes e documentação mínima.
-11. Bootstrap `.maestro/` a partir de `templates/living-project-knowledge/`.
+11. Bootstrap `.maestro/` a partir de `templates/living-project-knowledge/` (no workspace Maestro: `python scripts/new-project.py <slug>` já cria `projects/<slug>/` com `.maestro/`). Decisões vão para `.maestro/ARCHITECTURE.md`, `.maestro/DATABASE.md` e `.maestro/technical-decisions.md`.
 12. Sem push/deploy/prod sem autorização.
 13. Não inventar módulos de negócio nesta fase — só fundação.
 
@@ -69,11 +69,12 @@ Checklist obrigatório (completar ou N/A justificado):
 11. Componentes base e responsividade.
 12. Testes: comandos + P0 futuros.
 13. Docs: README esqueleto + `.maestro` bootstrap.
-14. Apresentar fundação ao usuário; só então `development-agent`.
+14. Apresentar fundação ao usuário (resumo curto); em modo automatic do `autonomous-project-builder` seguir direto para o desenvolvimento (`maestro-orchestrator` → `development-agent`), senão aguardar OK.
+15. Fundação **executável**: dependências instaladas, app sobe localmente e o primeiro teste de cada app passa (saída real).
 
 ### Saída esperada
 
-- Árvore de pastas acordada (e criada se autorizado).
+- Árvore de pastas definida e criada (em modo assisted, após OK do usuário).
 - README inicial + `.env.example`.
 - `.maestro/PROJECT_CONTEXT.md` preenchido com fatos.
 - Lista de próximas fases (V1).
@@ -87,7 +88,7 @@ Checklist obrigatório (completar ou N/A justificado):
 ## Erros comuns
 
 - Gerar CRUD completo na foundation.
-- Fixar Nest+React sem o usuário querer.
+- Fixar stack sem justificativa nem ADR, ou contra restrição do usuário (defaults de `autonomous-project-builder/stack-defaults.md` registrados em ADR são válidos).
 - Commitar `.env` real.
 - Pular `.maestro` e perder Living Knowledge.
 
@@ -105,7 +106,7 @@ Checklist obrigatório (completar ou N/A justificado):
 
 ## Checklist de validação
 
-- [ ] 14 pontos do processo cobertos ou N/A
+- [ ] 15 pontos do processo cobertos ou N/A
 - [ ] Stack justificada
 - [ ] `.maestro` bootstrap
 - [ ] `.env.example` sem segredos

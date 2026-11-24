@@ -1,4 +1,4 @@
-# Sync canonical skills/ -> .cursor/skills and .claude/skills
+# Sync canonical skills/ and agents/ -> .cursor and .claude
 # Usage: pwsh scripts/sync-skills.ps1
 
 $ErrorActionPreference = "Stop"
@@ -28,6 +28,20 @@ foreach ($target in $Targets) {
         Copy-Item -Recurse -Force $dir.FullName $dest
     }
     Write-Host "Synced $($skillDirs.Count) skills -> $target"
+}
+
+$AgentsSource = Join-Path $Root "agents"
+$AgentTargets = @(
+    (Join-Path $Root ".cursor\agents"),
+    (Join-Path $Root ".claude\agents")
+)
+$agentFiles = @(Get-ChildItem -Path $AgentsSource -Filter *.md -File -ErrorAction SilentlyContinue)
+foreach ($target in $AgentTargets) {
+    New-Item -ItemType Directory -Force -Path $target | Out-Null
+    foreach ($file in $agentFiles) {
+        Copy-Item -Force $file.FullName (Join-Path $target $file.Name)
+    }
+    Write-Host "Synced $($agentFiles.Count) agents -> $target"
 }
 
 Write-Host "Done."

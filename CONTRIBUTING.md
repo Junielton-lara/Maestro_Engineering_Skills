@@ -1,6 +1,6 @@
 # Contribuindo para o Maestro Engineering Skills
 
-Obrigado por contribuir. Este repositório é uma **biblioteca de Skills** (Agent Skills), não uma aplicação de produto.
+Obrigado por contribuir. Este repositório é uma **biblioteca de Skills** (Agent Skills) e um workspace de produtos (`projects/`). Este guia trata da biblioteca; produtos seguem `docs/autonomous-development.md`.
 
 ## Princípios
 
@@ -13,7 +13,7 @@ Obrigado por contribuir. Este repositório é uma **biblioteca de Skills** (Agen
 
 ## Fluxo
 
-1. Edite a **fonte canônica** em `skills/<nome>/SKILL.md` (ou templates/docs).
+1. Edite a **fonte canônica** em `skills/<nome>/SKILL.md`, `agents/<nome>.md` (ou templates/docs).
 2. Atualize `scripts/validate-skills.py` → `EXPECTED` se for skill nova.
 3. Rode:
 
@@ -35,18 +35,25 @@ python scripts/validate-skills.py
 
 ## Nova Skill local (produto)
 
-- Não vai neste repo (exceto exemplos em `templates/living-project-knowledge/`).
-- Criar em `.maestro/skills/` do app via `knowledge-agent`.
+- Nunca em `skills/` (exceto exemplos em `templates/living-project-knowledge/`).
+- Criar em `.maestro/skills/` do app via `knowledge-agent` (no workspace: `projects/<slug>/.maestro/skills/`).
+
+## Novo subagente
+
+- Arquivo `agents/<nome>.md` (frontmatter `name` = nome do arquivo, `description`, `model`, `readonly`).
+- Corpo curto que aponta para Skills existentes — não duplicar o conteúdo delas.
+- Só criar se houver ganho real de delegação (paralelismo ou isolamento read-only).
 
 ## Ambientes
 
 | Pasta | Uso |
 |-------|-----|
-| `skills/` | Fonte da verdade |
-| `.cursor/skills/` | Cursor (gerada por sync) |
-| `.claude/skills/` | Claude Code (gerada por sync) |
+| `skills/`, `agents/` | Fonte da verdade |
+| `.cursor/skills/`, `.cursor/agents/` | Cursor (gerada por sync) |
+| `.claude/skills/`, `.claude/agents/` | Claude Code (gerada por sync) |
+| `projects/` | Produtos — não fazem parte da biblioteca |
 
-Não edite `.cursor` / `.claude` diretamente.
+Não edite `.cursor/skills`, `.cursor/agents`, `.claude/skills` ou `.claude/agents` diretamente.
 
 ## Licença
 

@@ -56,10 +56,11 @@ Sincronizar documentação com o **código real**. Nunca documentar o que não f
 | Mudança | Doc |
 |---------|-----|
 | Setup | README |
-| Módulos/limites | architecture / `.maestro/knowledge/architecture.md` |
-| Endpoints | api-map |
-| Schema | database-map |
-| Regras | business-rules |
+| Módulos/limites | `.maestro/ARCHITECTURE.md` |
+| Endpoints | `.maestro/knowledge/api-map.md` |
+| Schema | `.maestro/DATABASE.md` |
+| Regras | `.maestro/PRODUCT_SPECIFICATION.md` (definição) + `.maestro/knowledge/business-rules.md` (evidência) |
+| Como executar / configurar | `README.md` do projeto (`projects/<slug>/README.md` no workspace Maestro) |
 | Env/deploy | deployment / environment |
 
 ## Boas práticas

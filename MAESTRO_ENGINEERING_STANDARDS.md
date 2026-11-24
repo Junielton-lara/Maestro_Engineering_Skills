@@ -9,7 +9,7 @@ Referência central de padrões do framework. **Não** substitui Skills — resu
 1. Inspecionar antes de alterar.
 2. Diff mínimo; reutilizar o que existe.
 3. Regras de negócio no servidor; UI não autoriza.
-4. Conhecimento do produto em `.maestro/`; conhecimento genérico nas Skills globais.
+4. Conhecimento do produto em `.maestro/` (no workspace: `projects/<slug>/.maestro/`); conhecimento genérico nas Skills globais.
 5. Economia de tokens contínua sem omitir segurança/testes necessários.
 6. Evidência > afirmação (testes, health, review).
 7. Sem operações destrutivas / push / prod sem autorização explícita.

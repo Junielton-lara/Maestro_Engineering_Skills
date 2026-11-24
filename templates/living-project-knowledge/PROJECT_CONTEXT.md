@@ -38,6 +38,15 @@
 - Testes obrigatórios:
 - UI kit / tokens:
 
+## Estado atual (retomada entre sessões)
+
+| Campo | Valor |
+|-------|-------|
+| Fase do fluxo | (1 Discovery … 8 Entrega) |
+| Último entregável validado | |
+| Próximo passo | |
+| Bloqueios / perguntas abertas | |
+
 ## Fora de escopo deste knowledge
 
 -

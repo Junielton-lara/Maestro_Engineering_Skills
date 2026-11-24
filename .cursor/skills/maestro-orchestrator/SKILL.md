@@ -8,7 +8,7 @@ description: >-
 metadata:
   framework: maestro-engineering-skills
   category: agents
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # Maestro Orchestrator
@@ -65,6 +65,7 @@ Coordenar **agentes especializados** (skills de papel) ao longo do ciclo de entr
 
 - Classificar: `create` | `fix` | `extend` | `refactor` | `ops` | `closeout`.
 - Greenfield completo → preferir `autonomous-project-builder`.
+- Workspace Maestro: todo agente recebe o projeto ativo `projects/<slug>/` e só atua dentro dele.
 - Definir in/out de escopo em 2–4 bullets.
 
 ### 2. Selecionar agentes
@@ -79,6 +80,34 @@ Coordenar **agentes especializados** (skills de papel) ao longo do ciclo de entr
 | Commit/PR/push | `git-agent` |
 | Deploy/env/servidor | `infrastructure-agent` |
 
+### 2b. Papéis do ciclo de produto → execução real
+
+Papéis não viram agentes novos: cada um é uma skill existente executada pelo agente principal **ou** um subagente real (`agents/*.md`, sincronizado em `.cursor/agents` e `.claude/agents`).
+
+| Papel | Skill(s) | Executor |
+|-------|----------|----------|
+| Product Manager | `product-discovery`, `prompt-master-generator` | Principal (dono da conversa com o usuário) |
+| Software Architect | `software-architecture` (+ `stack-defaults.md` do builder) | Principal |
+| Database | `database-postgresql`, `database-optimization` | Principal ou `maestro-backend-developer` |
+| UX/UI | `ux-ui-design`, `design-system`, `mobile-first` | Principal ou `maestro-frontend-developer` |
+| Frontend Development | `development-agent` + `frontend-engineering` | `maestro-frontend-developer` |
+| Backend Development | `development-agent` + `backend-engineering`, `api-design` | `maestro-backend-developer` |
+| QA | `qa-agent` | `maestro-qa` |
+| Code Review | `code-review-agent` | `maestro-code-reviewer` (read-only) |
+| Security | `security-engineering` | `maestro-security-reviewer` (read-only) |
+| Documentation | `documentation-agent` | Principal |
+| Infrastructure | `infrastructure-agent` | Principal (com autorização para prod) |
+| Git | `git-agent` | Principal (push só com OK) |
+| Knowledge | `knowledge-agent` | Principal |
+
+Sem suporte a subagentes na IDE → o principal executa o papel em sequência (“Agora: maestro-qa…”).
+
+### Paralelo vs sequencial
+
+- **Paralelo** só quando: entradas prontas (ex.: contrato em `knowledge/api-map.md`), paths disjuntos (`frontend/` × `backend/`), e nenhum depende do resultado do outro. Ex.: FE + BE do mesmo módulo; code review + security review (read-only).
+- **Sequencial** quando há dependência: spec → arquitetura → foundation → módulo N → integração → QA → docs/knowledge → git. Migrations, `package.json` compartilhado, `.maestro/` e git: sempre um executor por vez.
+- Prompt de delegação: projeto (`projects/<slug>/`), objetivo, paths permitidos, contrato/regras relevantes (IDs BR/CA), comandos de validação, formato de retorno. Nunca o histórico inteiro.
+
 ### 3. Distribuir
 
 - Ordem padrão adaptativa: **dev → análise diff → review → QA → docs → knowledge → git → (deploy se pedido)**.
@@ -90,9 +119,11 @@ Coordenar **agentes especializados** (skills de papel) ao longo do ciclo de entr
 
 - Unir achados sem repetir.
 - Lista de pendências abertas.
-- Proposta de encerramento ao usuário (seção 7 do pedido Maestro).
+- Proposta de encerramento ao usuário.
 
 ### 5. Encerramento (apresentar escolha)
+
+Chamado pelo `autonomous-project-builder` em modo automatic: **não** apresentar menu — executar QA/review/docs/knowledge proporcionais e perguntar só sobre Git (commit/push).
 
 Exemplo (adaptar; omitir itens já feitos):
 
@@ -149,3 +180,4 @@ Quais deseja executar?
 
 - `maestro-core`, `maestro-token-efficiency`, `agent-orchestration`
 - `development-agent`, `code-review-agent`, `qa-agent`, `documentation-agent`, `git-agent`, `knowledge-agent`, `infrastructure-agent`
+- `autonomous-project-builder` (fluxo completo em `projects/<slug>/`); subagentes em `agents/`

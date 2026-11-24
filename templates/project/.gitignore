@@ -1,0 +1,23 @@
+# Env / secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Dependencies / builds
+node_modules/
+dist/
+build/
+.next/
+coverage/
+*.tsbuildinfo
+__pycache__/
+.venv/
+
+# Local data / logs
+*.log
+*.sqlite
+*.db
+uploads/
+tmp/

@@ -1,3 +1,9 @@
+"""Regenerate the scaffold files of templates/living-project-knowledge.
+
+PRODUCT_SPECIFICATION.md, ARCHITECTURE.md, DATABASE.md, technical-decisions.md and
+README.md are edited directly in the template and are not written by this script.
+"""
+
 from pathlib import Path
 
 base = Path("templates/living-project-knowledge")
@@ -42,6 +48,15 @@ base = Path("templates/living-project-knowledge")
 - Branches / PRs:
 - Testes obrigatórios:
 - UI kit / tokens:
+
+## Estado atual (retomada entre sessões)
+
+| Campo | Valor |
+|-------|-------|
+| Fase do fluxo | (1 Discovery … 8 Entrega) |
+| Último entregável validado | |
+| Próximo passo | |
+| Bloqueios / perguntas abertas | |
 
 ## Fora de escopo deste knowledge
 
@@ -153,68 +168,23 @@ for folder, (n, t, f) in areas.items():
     (base / "skills" / folder / "SKILL.md").write_text(area_skill(n, t, f), encoding="utf-8")
 
 knowledge = {
-    "architecture.md": """# Architecture map
-
-## Estilo
-
--
-
-## Diagrama textual
-
-```text
-[Client] -> [API] -> [Services] -> [DB]
-```
-
-## Módulos e limites
-
-| Módulo | Pode | Não pode |
-|--------|------|----------|
-
-## Decisões
-
-| ID | Decisão | Status | Evidência |
-|----|---------|--------|-----------|
-""",
     "business-rules.md": """# Business rules
 
 | ID | Regra | Onde enforced | Teste |
 |----|-------|---------------|-------|
 | BR-01 | | | |
 """,
-    "database-map.md": """# Database map
-
-## Entidades principais
-
-| Tabela | Papel | Tenant? |
-|--------|-------|---------|
-
-## Relacionamentos
-
--
-
-## Migrations recentes relevantes
-
-|
-""",
     "api-map.md": """# API map
 
-| Method | Path | Auth | Notas |
-|--------|------|------|-------|
+Contrato entre frontend e backend (definido na Fase 3, mantido em sincronia com o código). Se houver OpenAPI gerado, linkar e manter aqui só o resumo.
+
+| Method | Path | Auth / perfis | Request (body/query) | Response | Erros | Regras (BR) |
+|--------|------|---------------|----------------------|----------|-------|-------------|
 """,
     "integrations.md": """# Integrations
 
 | Sistema | Direção | Auth | Path código |
 |---------|---------|------|-------------|
-""",
-    "technical-decisions.md": """# Technical decisions
-
-### ADR-local-001 — Título
-
-- Status:
-- Contexto:
-- Decisão:
-- Consequências:
-- Evidência:
 """,
     "project-conventions.md": """# Project conventions
 

@@ -10,6 +10,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "skills"
 TARGETS = [ROOT / ".cursor" / "skills", ROOT / ".claude" / "skills"]
+AGENTS_SOURCE = ROOT / "agents"
+AGENT_TARGETS = [ROOT / ".cursor" / "agents", ROOT / ".claude" / "agents"]
 
 REQUIRED_SECTIONS = [
     "## Objetivo",
@@ -156,6 +158,38 @@ def file_fingerprint(path: Path) -> str:
     return (path / "SKILL.md").read_text(encoding="utf-8")
 
 
+BACKTICK_RE = re.compile(r"`([a-z0-9]+(?:-[a-z0-9]+)+)`")
+
+
+def validate_agents(skills: set[str], errors: list[str]) -> int:
+    agent_files = sorted(AGENTS_SOURCE.glob("*.md")) if AGENTS_SOURCE.is_dir() else []
+    if not agent_files:
+        errors.append("agents/: no subagent definitions found")
+        return 0
+    agent_names = {f.stem for f in agent_files}
+    for agent in agent_files:
+        text = agent.read_text(encoding="utf-8")
+        try:
+            meta = parse_frontmatter(text)
+        except ValueError as exc:
+            errors.append(f"agents/{agent.name}: {exc}")
+            continue
+        if meta.get("name") != agent.stem:
+            errors.append(f"agents/{agent.name}: name '{meta.get('name')}' != file name")
+        if not meta.get("description"):
+            errors.append(f"agents/{agent.name}: missing description")
+        unknown = set(BACKTICK_RE.findall(text)) - skills - agent_names
+        if unknown:
+            errors.append(f"agents/{agent.name}: references unknown skills {sorted(unknown)}")
+        for target in AGENT_TARGETS:
+            copy = target / agent.name
+            if not copy.is_file():
+                errors.append(f"agent not synced: {agent.name} -> {target}")
+            elif copy.read_text(encoding="utf-8") != text:
+                errors.append(f"agent drift: {agent.name} in {target}")
+    return len(agent_files)
+
+
 def main() -> int:
     errors: list[str] = []
     if not SOURCE.is_dir():
@@ -216,13 +250,39 @@ def main() -> int:
     if not (ROOT / "CHANGELOG.md").is_file():
         errors.append("missing CHANGELOG.md")
 
+    workspace_files = [
+        "AGENTS.md",
+        "CLAUDE.md",
+        "projects/README.md",
+        "docs/autonomous-development.md",
+        "scripts/new-project.py",
+        "templates/project/AGENTS.md",
+        "templates/project/CLAUDE.md",
+        "templates/project/README.md",
+        "templates/project/.gitignore",
+        "templates/living-project-knowledge/PROJECT_CONTEXT.md",
+        "templates/living-project-knowledge/PRODUCT_SPECIFICATION.md",
+        "templates/living-project-knowledge/ARCHITECTURE.md",
+        "templates/living-project-knowledge/DATABASE.md",
+        "templates/living-project-knowledge/technical-decisions.md",
+        "skills/autonomous-project-builder/stack-defaults.md",
+    ]
+    for rel in workspace_files:
+        if not (ROOT / rel).is_file():
+            errors.append(f"missing workspace file: {rel}")
+
+    agent_count = validate_agents(found, errors)
+
     if errors:
         print("VALIDATION FAILED")
         for e in errors:
             print(f" - {e}")
         return 1
 
-    print(f"OK: {len(found)} skills valid; .cursor and .claude in sync; templates present.")
+    print(
+        f"OK: {len(found)} skills and {agent_count} agents valid; "
+        ".cursor and .claude in sync; templates and workspace files present."
+    )
     return 0
 
 

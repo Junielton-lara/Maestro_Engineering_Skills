@@ -8,7 +8,7 @@ description: >-
 metadata:
   framework: maestro-engineering-skills
   category: core
-  version: "1.1.0"
+  version: "1.2.0"
 ---
 
 # Prompt Master Generator
@@ -50,6 +50,8 @@ Produzir um **Prompt Master** completo, pronto para colar no IDE, cobrindo visã
 8. Defaults (ex.: PostgreSQL, REST) ok se documentados; não forçar Nest/React/Hostinger.
 9. Aplicar `prompt-optimization` (clareza sem cortar técnica necessária).
 10. Handoff: `project-foundation` / `autonomous-project-builder` / `software-architecture`.
+11. **Workspace Maestro (`projects/<slug>/`)**: não criar arquivo de Prompt Master separado. Na Fase 2 escrever só `projects/<slug>/.maestro/PRODUCT_SPECIFICATION.md` (seções 1–7, 15, 21–22 do template). As seções técnicas (8–10, 12–14, 16–20) vão para `ARCHITECTURE.md` e a 11 para `DATABASE.md` na Fase 3 (`software-architecture`). Defaults de `stack-defaults.md` registrados em ADR atendem à regra 8.
+12. Em modo automatic do `autonomous-project-builder`, lacunas não críticas são **inferidas** e registradas em “Premissas”, em vez de perguntadas; regra 2 vale só para as condições de parada do builder.
 
 ## Processo de execução
 

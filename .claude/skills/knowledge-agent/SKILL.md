@@ -9,7 +9,7 @@ description: >-
 metadata:
   framework: maestro-engineering-skills
   category: agents
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # Knowledge Agent
@@ -34,7 +34,7 @@ Manter o **Living Project Knowledge** (`.maestro/`) atualizado com conhecimento 
 ## Contexto técnico necessário
 
 - Diff / módulos novos.
-- `.maestro/` (criar a partir de `templates/living-project-knowledge/` se ausente).
+- `.maestro/` (criar a partir de `templates/living-project-knowledge/` se ausente). No workspace Maestro: `projects/<slug>/.maestro/` — nunca o `.maestro/` da raiz nem `skills/` globais.
 - Skills globais Maestro (não duplicar).
 - Fontes: código, testes, docs, decisões confirmadas.
 
@@ -64,7 +64,13 @@ Manter o **Living Project Knowledge** (`.maestro/`) atualizado com conhecimento 
 
 1. Diff → classificar: regra de negócio? arquitetura? padrão? schema? integração? convenção?
 2. Se trivial → stop.
-3. Atualizar `knowledge/*.md` e/ou `skills/<area>/SKILL.md`.
+3. Atualizar o arquivo certo (sem repetir conteúdo entre eles):
+   - Produto, requisitos, regras (BR-xx), aceite → `PRODUCT_SPECIFICATION.md`
+   - Stack, limites, auth, testes, infra → `ARCHITECTURE.md`; schema → `DATABASE.md`
+   - Decisão relevante → ADR em `technical-decisions.md`
+   - Evidência (endpoint, regra→código/teste, integração, convenção) → `knowledge/*.md`
+   - Padrão reutilizável de uma área → `skills/<area>/SKILL.md`
+   - Progresso → “Estado atual” em `PROJECT_CONTEXT.md`
 4. Avaliar skill nova (critérios abaixo).
 5. Changelog com data, motivo, arquivos.
 

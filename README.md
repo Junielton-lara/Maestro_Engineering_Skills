@@ -1,6 +1,6 @@
 # Maestro Engineering Skills
 
-Biblioteca profissional de **Agent Skills** para engenharia de software assistida por IA.
+Biblioteca profissional de **Agent Skills** para engenharia de software assistida por IA — e ambiente onde o Maestro transforma uma ideia em software completo dentro de `projects/`.
 
 O Maestro transforma boas práticas de arquitetura, front-end, back-end, qualidade, infra e operação em instruções reutilizáveis que agentes (Cursor, Claude Code e compatíveis com [Agent Skills](https://agentskills.io/specification)) podem descobrir e aplicar sob demanda.
 
@@ -23,8 +23,9 @@ O Maestro organiza **o que** fazer, **quando** ativar cada especialidade e **com
 3. **`maestro-core`** classifica a intenção e monta a trilha mínima.
 4. **`maestro-token-efficiency`** vale **sempre** (não só quando pedida).
 5. **Living Knowledge** do produto em `.maestro/` (separado do global).
-6. **Agentes de papel** (`*-agent`) para etapas do ciclo de vida.
-7. Sync para IDEs: `.cursor/skills/` e `.claude/skills/`.
+6. **Agentes de papel** (`*-agent`) para etapas do ciclo de vida + **subagentes reais** em `agents/` (FE, BE, QA, review, segurança).
+7. Sync para IDEs: `.cursor/skills/` e `.claude/skills/`; `.cursor/agents/` e `.claude/agents/`.
+8. **Workspace de produtos** em `projects/<slug>/`: o Maestro recebe uma ideia e constrói o software ali, isolado, com `.maestro/` próprio. `AGENTS.md`/`CLAUDE.md` na raiz roteiam o agente.
 
 ```bash
 python scripts/sync-skills.py
@@ -34,6 +35,20 @@ python scripts/validate-skills.py
 > Convenções reais: **`.cursor`** (Cursor) e **`.claude`** (Claude Code). Pastas `.curso`/`.cloud` **não** são o mecanismo de descoberta dessas ferramentas.
 
 ## Início rápido
+
+### Construir um software completo (ideia → V1)
+
+Abra a raiz deste repositório no Cursor ou Claude Code e escreva a ideia:
+
+```text
+Quero criar um sistema para gerenciar médicos, pacientes e atendimentos.
+```
+
+O Maestro (`autonomous-project-builder`, modo automatic) cria `projects/<slug>/`, gera especificação, arquitetura e decisões em `.maestro/`, implementa frontend/backend/banco com testes e entrega um relatório — perguntando só o indispensável ou arriscado. Guia: [`docs/autonomous-development.md`](./docs/autonomous-development.md).
+
+```bash
+python scripts/new-project.py --list   # projetos existentes e fase atual
+```
 
 ### Usar no Cursor / Claude Code
 
@@ -52,14 +67,14 @@ Gere o Prompt Master específico deste produto (não um blueprint genérico).
 
 Template: `templates/prompt-master.md`.
 
-### Iniciar um projeto novo (ideia → V1)
+### Modos do builder
 
 ```text
-Use autonomous-project-builder no modo assisted
-(ou planning / automatic com gates de segurança).
+Use autonomous-project-builder em modo planning (só documentos) ou assisted (confirma stack e módulos).
+Sem indicação, o modo é automatic.
 ```
 
-Fluxo: Discovery → Prompt Master → `project-foundation` → Arquitetura → Dev → Testes → Review → Docs → Knowledge → Entrega V1.
+Fluxo: Discovery → Product Definition → Arquitetura → Foundation → Desenvolvimento → QA → Docs/Knowledge → Entrega V1.
 
 ### Living Project Knowledge
 
@@ -67,7 +82,7 @@ Fluxo: Discovery → Prompt Master → `project-foundation` → Arquitetura → 
 Copy-Item -Recurse templates\living-project-knowledge caminho\do\app\.maestro
 ```
 
-Atualize com `knowledge-agent` após mudanças relevantes de regra/arquitetura/schema.
+Atualize com `knowledge-agent` após mudanças relevantes de regra/arquitetura/schema. Projetos em `projects/` já recebem o `.maestro/` via `scripts/new-project.py`.
 
 ### Correção simples (economia)
 
@@ -82,6 +97,7 @@ Não acione review/QA/docs/git a menos que eu peça.
 |-------|--------|
 | **Core** | `maestro-core`, `maestro-orchestrator`, `maestro-token-efficiency`, `autonomous-project-builder`, `project-foundation`, `product-discovery`, `prompt-master-generator`, `software-architecture`, `project-planning` |
 | **Agentes** | `development-agent`, `code-review-agent`, `qa-agent`, `documentation-agent`, `git-agent`, `knowledge-agent`, `infrastructure-agent` |
+| **Subagentes** (`agents/`) | `maestro-frontend-developer`, `maestro-backend-developer`, `maestro-qa`, `maestro-code-reviewer`, `maestro-security-reviewer` |
 | **Efficiency** | `context-management`, `prompt-optimization`, `intelligent-code-analysis`, `efficient-development`, `agent-orchestration`, `response-efficiency` |
 | **FE / BE / Quality / Infra / Docs** | ver pastas em `skills/` |
 
@@ -103,8 +119,8 @@ Padrões oficiais: [`MAESTRO_ENGINEERING_STANDARDS.md`](./MAESTRO_ENGINEERING_ST
 
 | Ambiente | Pasta de Skills | Notas |
 |----------|-----------------|-------|
-| Cursor | `.cursor/skills/` | Descoberta por description; subagentes `Task` opcionais |
-| Claude Code | `.claude/skills/` | Mesmo conteúdo sync; campos extras Claude só se necessários e documentados |
+| Cursor | `.cursor/skills/`, `.cursor/agents/`, `AGENTS.md` | Descoberta por description; `AGENTS.md` raiz e aninhado em `projects/<slug>/` |
+| Claude Code | `.claude/skills/`, `.claude/agents/`, `CLAUDE.md` | Mesmo conteúdo sync; `CLAUDE.md` importa `AGENTS.md`; subagentes não validados em execução |
 | Outros Agent Skills | `skills/` | Seguir [agentskills.io](https://agentskills.io/specification) |
 
 **Não** afirmamos compatibilidade universal com qualquer IDE sem validação.
@@ -129,14 +145,18 @@ Veja [CONTRIBUTING.md](./CONTRIBUTING.md). Histórico: [CHANGELOG.md](./CHANGELO
 ## Estrutura do repositório
 
 ```text
+AGENTS.md / CLAUDE.md           # instruções sempre carregadas pelos agentes
 skills/                         # fonte canônica global
-.cursor/skills/                 # sync Cursor
-.claude/skills/                 # sync Claude Code
-.maestro/                       # scaffold Living Knowledge (biblioteca)
-templates/                      # Prompt Master, foundation, publish, living knowledge
-docs/                           # notas de extração / histórico
+agents/                         # subagentes (fonte canônica)
+.cursor/skills/ .cursor/agents/ # sync Cursor
+.claude/skills/ .claude/agents/ # sync Claude Code
+.maestro/                       # scaffold Living Knowledge (biblioteca; não é projeto)
+projects/                       # produtos construídos pelo Maestro (um por pasta)
+templates/                      # Prompt Master, foundation, project, living knowledge
+docs/                           # guia do ambiente autônomo, notas de extração
 scripts/sync-skills.py
 scripts/validate-skills.py
+scripts/new-project.py
 MAESTRO_ENGINEERING_STANDARDS.md
 README.md
 CONTRIBUTING.md

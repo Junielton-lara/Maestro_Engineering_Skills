@@ -8,7 +8,7 @@ description: >-
 metadata:
   framework: maestro-engineering-skills
   category: agents
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # Git Agent
@@ -43,6 +43,7 @@ Preparar versionamento seguro: status claro, commits organizados, **push só com
 6. Mensagem de commit: por quê, 1–2 frases, estilo do repo.
 7. Não usar `--no-verify` / amend perigoso salvo regras do usuário.
 8. Não atualizar git config.
+9. Workspace Maestro: commits de produto incluem só `projects/<slug>/` (sem misturar com `skills/`, `agents/`, `templates/` ou outros projetos). Extrair o projeto para repositório próprio só a pedido do usuário.
 
 ## Processo de execução
 
